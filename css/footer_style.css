@@ -1,0 +1,16 @@
+﻿.footerlinks {
+    color: azure;
+    text-decoration: none !important;
+}
+
+    .footerlinks:hover{
+        color: aquamarine;
+    }
+
+#footer1{
+    background-color: orange;
+}
+
+#footer2{
+    background-color: orange;
+}
