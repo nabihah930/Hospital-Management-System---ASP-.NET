@@ -1,0 +1,14 @@
+﻿#homepageBG1 {
+    width: 1370px;
+    height: 150px;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+}
+#iconPatient {
+    width: 150px;
+    height: 110px;
+}
+#iconDoctor {
+    width: 150px;
+    height: 130px;
+}
