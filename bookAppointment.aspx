@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container">
       <div class="row">
-          <%--mx-auto simply moves the division to the center--%>
+          <%--<asp:TextBox CssClass="form-control" ID="TextBox1" runat="server" placeholder="Doctor's Name"></asp:TextBox>--%>
          <div class="col-md-8 mx-auto">
              <%--card: bootstrap class which has a body, title or button--%>
             <div class="card">
@@ -33,11 +33,15 @@
                      <div class="col">
                         <label>Doctor's Name</label>
                         <div class="form-group">                    <%--form-group: simply a bootstrap class to add some additional styling to the interface--%>
-                           <asp:TextBox CssClass="form-control" ID="TextBox1" runat="server" placeholder="Doctor's Name"></asp:TextBox>
+                           <%--<asp:TextBox CssClass="form-control" ID="TextBox1" runat="server" placeholder="Doctor's Name"></asp:TextBox>--%>
+                           <asp:DropDownList CssClass="form-control" ID="DropDownDoc" runat="server" AutoPostBack="True" OnSelectedIndexChanged = "OnSelectedIndexChanged">
+                               <asp:ListItem Text="Select Doctor" Value="Select"/>
+                           </asp:DropDownList>
                         </div>
                         <label>Time Slot</label>
                         <div class="form-group">
-                           <asp:TextBox CssClass="form-control" ID="TextBox2" runat="server" placeholder="Available Time Slot"></asp:TextBox>
+                           <%--<asp:TextBox CssClass="form-control" ID="TextBox2" runat="server" placeholder="Available Time Slot"></asp:TextBox>--%>
+                            <asp:DropDownList CssClass="form-control" ID="DropDownTime" runat="server" AutoPostBack="True"></asp:DropDownList>
                         </div>
                         <label>Room Number</label>
                         <div class="form-group">
@@ -50,11 +54,11 @@
                         </div>
                          <center>
                              <div class="form-group">
-                                <asp:Button class="btn btn-success btn-lg btn-block" ID="Button1" runat="server" Text="Book Appointment" />
+                                <asp:Button class="btn btn-success btn-lg w-100" ID="Button1" runat="server" Text="Book Appointment" OnClick="Button1_Click" />
                              </div>
                              <br>
                              <div class="form-group">
-                                <input class="btn btn-danger btn-block btn-lg" id="Button2" type="button" value="Clear Form" />
+                                <input class="btn btn-danger btn-lg w-100" id="Button2" type="button" value="Clear Form" />
                              </div>
                         </center>
                      </div>
