@@ -15,7 +15,7 @@
         Biryani:-<br />
 
         Quantity:-
-        <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TextBox2" runat="server" Text="0"></asp:TextBox>
         <br />
         Subtotal:-
         <asp:Label ID="Label4" runat="server" Text="-"></asp:Label>
@@ -23,39 +23,39 @@
         <br />
         CheeseCake:-<br />
         Quantity:-
-        <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TextBox3" runat="server" Text="0"></asp:TextBox>
         <br />
         Subtotal:-
         <asp:Label ID="Label5" runat="server" Text="-"></asp:Label>
         <br />
         <br />
         Daal:-<br />
-        Quantity:-<asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+        Quantity:-<asp:TextBox ID="TextBox4" runat="server" Text="0"></asp:TextBox>
         <br />
         Subtotal:-<asp:Label ID="Label6" runat="server" Text="-"></asp:Label>
         <br />
         <br />
         Ice-Cream:-<br />
-        Quantity:-<asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+        Quantity:-<asp:TextBox ID="TextBox5" runat="server" Text="0"></asp:TextBox>
         <br />
         SubTotal:-<asp:Label ID="Label7" runat="server" Text="-"></asp:Label>
         <br />
         <br />
         Kheer:-<br />
-        Quantity:-<asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+        Quantity:-<asp:TextBox ID="TextBox6" runat="server" Text="0"></asp:TextBox>
         <br />
         SubTotal:-<asp:Label ID="Label8" runat="server" Text="-"></asp:Label>
         <br />
         <br />
         Mexican Soup:-<br />
-        Quantity:-<asp:TextBox ID="TextBox7" runat="server"></asp:TextBox>
+        Quantity:-<asp:TextBox ID="TextBox7" runat="server" Text="0"></asp:TextBox>
         <br />
         SubTotal:-<asp:Label ID="Label9" runat="server" Text="-"></asp:Label>
         <br />
         <br />
         Roti:-<br />
         Quantity:-
-        <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox>
+        <asp:TextBox ID="TextBox8" runat="server" Text="0"></asp:TextBox>
         <br />
         SubTotal:-<asp:Label ID="Label10" runat="server" Text="-"></asp:Label>
         <br />
