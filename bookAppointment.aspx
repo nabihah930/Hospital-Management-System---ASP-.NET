@@ -41,11 +41,15 @@
                         <label>Time Slot</label>
                         <div class="form-group">
                            <%--<asp:TextBox CssClass="form-control" ID="TextBox2" runat="server" placeholder="Available Time Slot"></asp:TextBox>--%>
-                            <asp:DropDownList CssClass="form-control" ID="DropDownTime" runat="server" AutoPostBack="True"></asp:DropDownList>
+                            <asp:DropDownList CssClass="form-control" ID="DropDownTime" runat="server" AutoPostBack="True" OnSelectedIndexChanged = "Time_OnSelectedIndexChanged">
+                                <asp:ListItem Text="Select Time Slot" Value="Select"/>
+                            </asp:DropDownList>
                         </div>
                         <label>Room Number</label>
                         <div class="form-group">
-                           <asp:TextBox CssClass="form-control" ID="TextBox3" runat="server" placeholder="Available Room for Appointment"></asp:TextBox>
+                            <asp:DropDownList CssClass="form-control" ID="DropDownRoom" runat="server" AutoPostBack="True">
+                                <asp:ListItem Text="Select Appointment Room" Value="Select"/>
+                            </asp:DropDownList>
                         </div>
                         <div class="row">
                             <div class="col">
