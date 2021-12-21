@@ -13,9 +13,10 @@ namespace HospitalManagementSys
 {
     public partial class bookAppointment : System.Web.UI.Page
     {
-        static string doc_ID = "", dept_ID = "";
+        static string doc_ID = "", dept_ID = "", new_appointmentID = "", selected_day="", selected_room="";
         static int total_cost = 0;
         Dictionary<int, string> Time_Slot_Data = new Dictionary<int, string>();
+        DateTime selected_start_time = new DateTime();
         string connectionStr = ConfigurationManager.ConnectionStrings["connection"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -150,13 +151,20 @@ namespace HospitalManagementSys
         {
             try
             {
+                //selected_start_time
+                string date_str = "";
+                char[] spearator = { ':', ' ', '-' };
+                string[] selected_slot = DropDownTime.SelectedItem.ToString().Split(spearator, StringSplitOptions.RemoveEmptyEntries);
+                selected_day = selected_slot[0];
+                date_str = selected_slot[1] + ":" + selected_slot[2] + " " + selected_slot[3];
+                selected_start_time = Convert.ToDateTime(date_str);
+                //Response.Write("<script>alert('Day:" + selected_day + " Start Time: " + selected_start_time + "');</script>");
                 SqlConnection connection = new SqlConnection(connectionStr);
                 if (connection.State == ConnectionState.Closed)                             //Check if connection is open.
                     connection.Open();
                 dept_ID = Get_Doc_Dept(connection);
-                Dictionary<int, string> Room_Info = new Dictionary<int, string>();
+                Dictionary<string, string> Room_Info = new Dictionary<string, string>();
                 string roomDescrp = "";
-                //string dept_initial = dept_ID.Substring(0);
                 List<string> roomID = new List<string>();
                 List<string> roomType = new List<string>();
                 List<int> roomCharges = new List<int>();
@@ -164,7 +172,7 @@ namespace HospitalManagementSys
                 List<int> roomSpots = new List<int>();
                 //Response.Write("<script>alert('Time Slot Chosen: " + DropDownTime.SelectedItem + "💃 with Doctor: " + DropDownDoc.SelectedItem + "');</script>");
                 SqlCommand getRooms = new SqlCommand("SELECT room_id, room_type, charges, capacity, available_spots FROM rooms WHERE room_id LIKE '" + dept_ID[0] + "%';", connection);
-                Response.Write("<script>alert('dept_ID[0]:" + dept_ID[0] + "');</script>");
+                //Response.Write("<script>alert('dept_ID[0]:" + dept_ID[0] + "');</script>");
                 SqlDataReader dataReader = getRooms.ExecuteReader();
                 while (dataReader.Read())
                 {
@@ -180,19 +188,65 @@ namespace HospitalManagementSys
                 {
                     if (roomSpots[counter] != 0)
                     {
-                        Response.Write("<script>alert('roomID:" + roomID[counter] + " roomSpots: " + roomSpots[counter] + "');</script>");
-                        roomDescrp = roomType[counter] + ": Remaining Capacity: " + roomSpots[counter]+" (" + roomCharges[counter] + "Rs)";
-                        Room_Info.Add(roomCharges[counter], roomDescrp);
+                        //Response.Write("<script>alert('roomID:" + roomID[counter] + " roomSpots: " + roomSpots[counter] + "');</script>");
+                        roomDescrp = roomType[counter] + " Ward: Remaining Capacity: " + roomSpots[counter] + " (" + roomCharges[counter] + " Rs)";
+                        Room_Info.Add(roomID[counter], roomDescrp);
                     }
                     else
                         roomsFull++;
+                        //Response.Write("<script>alert('roomID:" + roomID[counter] + " roomSpots: " + roomSpots[counter] + "');</script>"); //roomsFull++;
                 }
                 if (roomsFull == 3)
-                    Response.Write("<script>alert('Sorry there are no beds available for for this department at the moment. Please try again later.');</script>");
+                    Response.Write("<script>alert('Sorry there are no rooms available for this department at the moment. Please try again later.');</script>");
+                
                 DropDownRoom.DataTextField = "Value";                            //Binding the dictionary to our dropdown list.
                 DropDownRoom.DataValueField = "Key";
                 DropDownRoom.DataSource = Room_Info;
                 DropDownRoom.DataBind();
+            }
+            catch (Exception excpt)
+            {
+                Response.Write("<script>alert('" + excpt.Message + "');</script>");
+            }
+        }
+        protected void Room_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Response.Write("<script>alert('Time Slot Chosen: " + DropDownTime.SelectedItem + "💃 with Doctor: " + DropDownDoc.SelectedItem + " in Room: " + DropDownRoom.SelectedItem + "');</script>");
+            //string price_str = "";
+            char[] spearator = { ':', ' ', '(' };
+            string[] selected_price = DropDownRoom.SelectedItem.ToString().Split(spearator, StringSplitOptions.RemoveEmptyEntries);
+            //price_str = selected_price[5];total_cost = total_cost + Convert.ToInt32(selected_price[5]);
+            selected_room = DropDownRoom.SelectedValue.ToString();
+            try
+            {
+                string appointment_id = "", appointment_code = "", appointment_num = "";
+                SqlConnection connection = new SqlConnection(connectionStr);
+                if (connection.State == ConnectionState.Closed)                             //Check if connection is open.
+                    connection.Open();
+                SqlCommand getAppID = new SqlCommand("SELECT MAX(appointment_num) AS appointment_id FROM appointments;", connection);
+                SqlDataReader dataReader = getAppID.ExecuteReader();
+                while (dataReader.Read())
+                {
+                    appointment_id = dataReader["appointment_id"].ToString();
+                }
+                dataReader.Close();
+                appointment_num = appointment_id.Substring(3);
+                appointment_code = appointment_id.Substring(0, 3);
+                //Response.Write("<script>alert('appointment_num2:" + appointment_num + " appointment_code: " + appointment_code + "');</script>");
+                int app_number1 = (int)Char.GetNumericValue(appointment_num[0]);
+                int app_number2 = (int)Char.GetNumericValue(appointment_num[1]);
+                //Response.Write("<script>alert('app_number1:" + app_number1 + " app_number2: " + app_number2 + "');</script>");
+                if (app_number2 == 9)
+                {
+                    app_number2++;
+                    app_number1++;
+                }
+                else
+                    app_number2++;
+                appointment_num = Convert.ToString(app_number1)+Convert.ToString(app_number2);
+                //appointment_num = String.Concat(Convert.ToString(app_number1), Convert.ToString(app_number2));
+                new_appointmentID = appointment_code + appointment_num;
+                //Response.Write("<script>alert('Appointment_num Generated: " + new_appointmentID + "💃 ');</script>");
             }
             catch (Exception excpt)
             {
@@ -269,7 +323,7 @@ namespace HospitalManagementSys
                 List<string> occupied_days = new List<string>();
                 List<DateTime> available_start_time = new List<DateTime>();
                 List<DateTime> available_end_time = new List<DateTime>();
-                Response.Write("<script>alert('Inside else?!?!');</script>");
+                //Response.Write("<script>alert('Inside else?!?!');</script>");
                 SqlCommand getAppointments = new SqlCommand("SELECT start_time, end_time, appointment_day FROM appointments WHERE doctor_id = '" + doc_ID + "';", connection);
                 SqlDataReader dataReader = getAppointments.ExecuteReader();
                 while (dataReader.Read())
@@ -391,7 +445,7 @@ namespace HospitalManagementSys
                     for (int counter = 0; counter < (3*12)-1; counter++)
                     {
                         data_string = available_days[counter] + ": " + available_start_time[counter].ToString("hh:mm tt") + "-" + available_end_time[counter].ToString("hh:mm tt");
-                        Time_Slot_Data.Add(counter + 1, data_string);
+                        Time_Slot_Data.Add(counter+1, data_string);
                         data_string = "";
                     }
                 }
@@ -497,10 +551,24 @@ namespace HospitalManagementSys
             try
             {
                 SqlConnection connection = new SqlConnection(connectionStr);
-                if (connection.State == ConnectionState.Closed)                 //Check if connection is open.
+                string sqlFormattedDateStart = selected_start_time.ToString("HH:mm:ss.fff");
+                string sqlFormattedDateEnd = selected_start_time.AddMinutes(15).ToString("HH:mm:ss.fff");
+                if (connection.State == ConnectionState.Closed)                             //Check if connection is open.
                     connection.Open();
-                Response.Write("<script>alert('Successfully Connected to the DB');</script>");
+                //Response.Write("<script>alert('Successfully Connected to the DB');</script>");
+                SqlCommand insertAppointment = new SqlCommand("INSERT INTO appointments(appointment_num, appointment_type, patient_id, doctor_id, room_id, start_time, end_time, appointment_day, charges) values(@appointment_num, @appointment_type, @patient_id, @doctor_id, @room_id, @start_time, @end_time, @appointment_day, @charges)", connection);
+                insertAppointment.Parameters.AddWithValue("@appointment_num", new_appointmentID);
+                insertAppointment.Parameters.AddWithValue("@appointment_type", "CON01");
+                insertAppointment.Parameters.AddWithValue("@patient_id", "PID05");
+                insertAppointment.Parameters.AddWithValue("@doctor_id", doc_ID);
+                insertAppointment.Parameters.AddWithValue("@room_id", selected_room);
+                insertAppointment.Parameters.AddWithValue("@start_time", sqlFormattedDateStart);
+                insertAppointment.Parameters.AddWithValue("@end_time", sqlFormattedDateEnd);
+                insertAppointment.Parameters.AddWithValue("@appointment_day", selected_day);
+                insertAppointment.Parameters.AddWithValue("@charges", total_cost);
+                insertAppointment.ExecuteNonQuery();
                 connection.Close();
+                Response.Write("<script>alert('Appointment Booked Successfully. Please go to Home to continue browsing');</script>");
             }
             catch(Exception excpt)
             {

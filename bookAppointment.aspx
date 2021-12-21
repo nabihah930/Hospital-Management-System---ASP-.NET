@@ -47,7 +47,7 @@
                         </div>
                         <label>Room Number</label>
                         <div class="form-group">
-                            <asp:DropDownList CssClass="form-control" ID="DropDownRoom" runat="server" AutoPostBack="True">
+                            <asp:DropDownList CssClass="form-control" ID="DropDownRoom" runat="server" AutoPostBack="True" OnSelectedIndexChanged = "Room_OnSelectedIndexChanged">
                                 <asp:ListItem Text="Select Appointment Room" Value="Select"/>
                             </asp:DropDownList>
                         </div>
@@ -59,10 +59,6 @@
                          <center>
                              <div class="form-group">
                                 <asp:Button class="btn btn-success btn-lg w-100" ID="Button1" runat="server" Text="Book Appointment" OnClick="Button1_Click" />
-                             </div>
-                             <br>
-                             <div class="form-group">
-                                <input class="btn btn-danger btn-lg w-100" id="Button2" type="button" value="Clear Form" />
                              </div>
                         </center>
                      </div>
